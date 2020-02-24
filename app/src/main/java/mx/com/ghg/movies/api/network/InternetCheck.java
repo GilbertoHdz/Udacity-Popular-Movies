@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * Resource provided from:
+ * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+ */
 public class InternetCheck extends AsyncTask<Void, Void, Boolean> {
 
     private Consumer mConsumer;

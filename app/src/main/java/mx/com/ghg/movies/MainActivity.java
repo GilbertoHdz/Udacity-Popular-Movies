@@ -5,25 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import mx.com.ghg.movies.api.models.Movie;
 import mx.com.ghg.movies.api.network.InternetCheck;
 import mx.com.ghg.movies.api.utilities.MovieJsonUtils;
 import mx.com.ghg.movies.api.utilities.NetworkUtils;
 import mx.com.ghg.movies.ui.MovieAdapter;
+import mx.com.ghg.movies.ui.MovieDetailActivity;
 import mx.com.ghg.movies.ui.MovieUi;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
@@ -113,7 +113,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onMovieItemClick(MovieUi movieUi) {
-
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.ARG_MOVIE_UI, movieUi);
+        startActivity(intent);
     }
 
     /**
