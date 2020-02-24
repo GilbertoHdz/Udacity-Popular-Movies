@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Gilinho Movies</string>
+    <string name="menu_most_popular">Most Popular</string>
+    <string name="menu_top_rated">Top Rated</string>
+    <string name="movies_error_message">An error has occurred, Please try again.</string>
+    <string name="movies_error_network_message">No internet connection, Please connect network.</string>
+    <string name="movies_error_empty_message">No movies finding.</string>
+</resources>
