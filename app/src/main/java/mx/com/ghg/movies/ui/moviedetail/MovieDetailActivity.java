@@ -18,9 +18,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import mx.com.ghg.movies.R;
+import mx.com.ghg.movies.api.models.Review;
 import mx.com.ghg.movies.api.models.Video;
 import mx.com.ghg.movies.api.network.InternetCheck;
 import mx.com.ghg.movies.api.utilities.NetworkUtils;
+import mx.com.ghg.movies.api.utilities.ReviewJsonUtils;
 import mx.com.ghg.movies.api.utilities.VideoJsonUtils;
 import mx.com.ghg.movies.ui.movies.MainActivity;
 import mx.com.ghg.movies.ui.movies.MovieUi;
@@ -121,6 +123,9 @@ public class MovieDetailActivity
         _videosRecycler.setVisibility(View.VISIBLE);
         _loader.setVisibility(View.GONE);
         _error_message.setVisibility(View.GONE);
+
+        // continue with review
+        new ReviewQueryTask().execute(movieUi.getId().toString());
     }
 
     private void showErrorMessage(int resMsgId) {
@@ -128,9 +133,18 @@ public class MovieDetailActivity
         _error_message.setText(message);
         _error_message.setVisibility(View.VISIBLE);
         _loader.setVisibility(View.GONE);
-        _videosRecycler.setVisibility(View.GONE);
+        _videosRecycler.setVisibility(View.INVISIBLE);
     }
 
+    private void showReviewErrorMessage(int resMsgId) {
+        String message = getApplicationContext().getString(resMsgId);
+        _error_message.setText(message);
+        _error_message.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Async request for Videos by Id
+     */
     public class VideosQueryTask extends AsyncTask<String, Void, ArrayList<Video>> {
         @Override
         protected ArrayList<Video> doInBackground(String... url) {
@@ -148,15 +162,14 @@ public class MovieDetailActivity
         @Override
         protected void onPostExecute(ArrayList<Video> videos) {
             super.onPostExecute(videos);
-            int size = videos.size();
-            if (size == 0) {
+            if (null == videos || videos.size() == 0) {
                 showErrorMessage(R.string.videos_error_empty_message);
             } else {
-                ArrayList videosUi = new ArrayList(size);
-                for (int i = 0; i < size; i++) {
+                ArrayList videosUi = new ArrayList(videos.size());
+                for (int i = 0; i < videos.size(); i++) {
                     Video video = videos.get(i);
 
-                    MovieDetailUi videoUi = new MovieDetailUi(
+                    VideoUi videoUi = new VideoUi(
                             video.getId(),
                             video.getName(),
                             video.getKey()
@@ -167,6 +180,48 @@ public class MovieDetailActivity
 
                 _videoAdapter.setVideoItems(videosUi);
                 showVideos();
+            }
+        }
+    }
+
+    /**
+     * Async request for Reviews by Id
+     */
+    public class ReviewQueryTask extends AsyncTask<String, Void, ArrayList<Review>> {
+        @Override
+        protected ArrayList<Review> doInBackground(String... url) {
+            try {
+                URL requestUrl = NetworkUtils.buildUrl(url[0], "reviews");
+                String jsonResponse = NetworkUtils.getResponseFromHttpUrl(requestUrl);
+
+                return ReviewJsonUtils.getReviewsFromJson(jsonResponse);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Review> reviews) {
+            super.onPostExecute(reviews);
+            if (null == reviews ||reviews.size() == 0) {
+                showReviewErrorMessage(R.string.review_error_empty_message);
+            } else {
+                ArrayList reviewsUi = new ArrayList(reviews.size());
+                for (int i = 0; i < reviews.size(); i++) {
+                    Review review = reviews.get(i);
+
+                    ReviewUi videoUi = new ReviewUi(
+                            review.getId(),
+                            review.getAuthor(),
+                            review.getContent(),
+                            review.getUrl()
+                    );
+
+                    reviewsUi.add(videoUi);
+                }
+
+                _videoAdapter.addReviewItems(reviewsUi);
             }
         }
     }

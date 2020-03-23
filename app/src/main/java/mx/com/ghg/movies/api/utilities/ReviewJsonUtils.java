@@ -16,7 +16,7 @@ public final class ReviewJsonUtils {
     private static final String URL = "url";
     private static final String RESULTS = "results";
 
-    public static ArrayList<Review> getMovieReviewFromJson(
+    public static ArrayList<Review> getReviewsFromJson(
             String strJsonReview
     ) throws JSONException {
         JSONObject reviewsJson = new JSONObject(strJsonReview);

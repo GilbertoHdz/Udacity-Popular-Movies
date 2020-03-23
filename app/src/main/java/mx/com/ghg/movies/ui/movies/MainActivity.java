@@ -58,10 +58,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         _moviesAdapter = new MovieAdapter(this);
         _moviesRecycler.setAdapter(_moviesAdapter);
 
-        if (null != savedInstanceState && savedInstanceState.containsKey(KEY_QUERY_MOVIE)) {
+        if (null != savedInstanceState
+                && savedInstanceState.containsKey(KEY_QUERY_MOVIE)
+                && savedInstanceState.getInt(KEY_QUERY_MOVIE) != -1
+        ) {
             checkNetworkConnection(savedInstanceState.getInt(KEY_QUERY_MOVIE));
-        } else {
-            checkNetworkConnection(R.id.menu_most_popular);
         }
     }
 
@@ -102,8 +103,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     switch (menuOptionSelected) {
                         case R.id.menu_most_popular:
                             new MovieQueryTask().execute("top_rated");
+                            break;
                         case R.id.menu_top_rated:
                             new MovieQueryTask().execute("popular");
+                            break;
                     }
                 } else {
                     showErrorMessage(R.string.movies_error_network_message);
@@ -153,12 +156,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         protected void onPostExecute(ArrayList<Movie> movies) {
             super.onPostExecute(movies);
-            int size = movies.size();
-            if (size == 0) {
+            if (null == movies || movies.size() == 0) {
                 showErrorMessage(R.string.movies_error_empty_message);
             } else {
-                ArrayList moviesUi = new ArrayList(size);
-                for (int i = 0; i < size; i++) {
+                ArrayList moviesUi = new ArrayList(movies.size());
+                for (int i = 0; i < movies.size(); i++) {
                     Movie movie = movies.get(i);
                     MovieUi movieUi = new MovieUi(
                             movie.getId(),
