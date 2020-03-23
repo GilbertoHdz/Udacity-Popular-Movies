@@ -1,4 +1,4 @@
-package mx.com.ghg.movies.ui;
+package mx.com.ghg.movies.ui.movies;
 
 import android.content.Context;
 import android.view.LayoutInflater;

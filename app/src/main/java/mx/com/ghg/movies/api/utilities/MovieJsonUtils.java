@@ -1,14 +1,10 @@
 package mx.com.ghg.movies.api.utilities;
 
-import android.content.ContentValues;
-import android.content.Context;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import mx.com.ghg.movies.api.models.Movie;
 

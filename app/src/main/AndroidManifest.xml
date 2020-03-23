@@ -13,15 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MovieDetailActivity"
+            android:name=".ui.moviedetail.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.movies.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="mx.com.ghg.movies.MainActivity" />
+                android:value="mx.com.ghg.movies.ui.movies.MainActivity" />
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.movies.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

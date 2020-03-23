@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.MovieDetailActivity"
+    tools:context=".ui.moviedetail.MovieDetailActivity"
     tools:showIn="@layout/movie_detail_activity">
 
     <RelativeLayout
@@ -66,6 +66,62 @@
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
             android:text="lorem impsum" />
+
+        <TextView
+            android:id="@+id/movie_detail_divider_tool"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@id/movie_detail_overview_text"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:id="@+id/movie_detail_trailers_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_divider_tool"
+            android:layout_marginStart="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:text="Trailers:"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryText"/>
+
+        <ProgressBar
+            android:id="@+id/movie_detail_loader_pb"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_below="@id/movie_detail_trailers_text"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movie_detail_videos_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_trailers_text"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            tools:listitem="@layout/movie_detail_video_item_layout"/>
+
+        <TextView
+            android:id="@+id/movie_detail_error_message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/movie_detail_divider_tool"
+            android:textColor="@color/colorPrimaryText"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:text="error message"/>
 
     </RelativeLayout>
 

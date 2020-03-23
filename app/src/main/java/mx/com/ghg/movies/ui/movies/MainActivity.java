@@ -1,4 +1,4 @@
-package mx.com.ghg.movies;
+package mx.com.ghg.movies.ui.movies;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,15 +18,17 @@ import android.widget.TextView;
 import java.net.URL;
 import java.util.ArrayList;
 
+import mx.com.ghg.movies.R;
 import mx.com.ghg.movies.api.models.Movie;
 import mx.com.ghg.movies.api.network.InternetCheck;
 import mx.com.ghg.movies.api.utilities.MovieJsonUtils;
 import mx.com.ghg.movies.api.utilities.NetworkUtils;
-import mx.com.ghg.movies.ui.MovieAdapter;
-import mx.com.ghg.movies.ui.MovieDetailActivity;
-import mx.com.ghg.movies.ui.MovieUi;
+import mx.com.ghg.movies.ui.moviedetail.MovieDetailActivity;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
+
+    private static final String KEY_QUERY_MOVIE = "MainActivity.movie.query.task";
+    private int _menu_id_selected = -1;
 
     RecyclerView _moviesRecycler;
     ProgressBar _moviesLoader;
@@ -55,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         _moviesRecycler.setHasFixedSize(true);
         _moviesAdapter = new MovieAdapter(this);
         _moviesRecycler.setAdapter(_moviesAdapter);
+
+        if (null != savedInstanceState && savedInstanceState.containsKey(KEY_QUERY_MOVIE)) {
+            checkNetworkConnection(savedInstanceState.getInt(KEY_QUERY_MOVIE));
+        } else {
+            checkNetworkConnection(R.id.menu_most_popular);
+        }
     }
 
     @Override
@@ -78,7 +86,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_QUERY_MOVIE, _menu_id_selected);
+    }
+
     private void checkNetworkConnection(final int menuOptionSelected) {
+        _menu_id_selected = menuOptionSelected;
         _moviesLoader.setVisibility(View.VISIBLE);
         new InternetCheck(new InternetCheck.Consumer() {
             @Override

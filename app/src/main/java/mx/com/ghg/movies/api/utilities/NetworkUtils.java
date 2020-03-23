@@ -1,6 +1,7 @@
 package mx.com.ghg.movies.api.utilities;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,8 @@ public class NetworkUtils {
 
     final static String MOVIE_BASE_URL = "https://api.themoviedb.org/3/movie/";
     final static String PARAM_API_KEY = "api_key";
-    final static String SECRET_API_KEY = "";
+    final static String SECRET_API_KEY = "58f23c47cc24240c20b12d738d98ea08";
+    final static String TAG = NetworkUtils.class.getSimpleName();
 
     /**
      * @param path The path that will be queried for api. ej: movies/get-popular-movies.
@@ -21,6 +23,23 @@ public class NetworkUtils {
      */
     public static URL buildUrl(String path) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendPath(path)
+                .appendQueryParameter(PARAM_API_KEY, SECRET_API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static URL buildUrl(String id, String path) {
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendPath(id)
                 .appendPath(path)
                 .appendQueryParameter(PARAM_API_KEY, SECRET_API_KEY)
                 .build();
@@ -56,6 +75,8 @@ public class NetworkUtils {
                 response = scanner.next();
             }
             scanner.close();
+
+            Log.i(TAG, response);
             return response;
         } finally {
             urlConnection.disconnect();
