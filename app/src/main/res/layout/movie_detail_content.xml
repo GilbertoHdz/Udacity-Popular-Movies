@@ -49,11 +49,21 @@
             android:id="@+id/movie_detail_average_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/movie_detail_date_text"
+            android:layout_below="@id/movie_detail_date_text"
             android:layout_alignStart="@+id/movie_detail_date_text"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="10.10" />
+
+        <Button
+            android:id="@+id/movie_detail_mark_favorite_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Mark as\nfavorite"
+            android:textSize="10sp"
+            android:layout_alignStart="@id/movie_detail_date_text"
+            android:layout_below="@id/movie_detail_average_text"/>
 
         <TextView
             android:id="@+id/movie_detail_overview_text"

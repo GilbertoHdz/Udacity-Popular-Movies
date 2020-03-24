@@ -1,6 +1,7 @@
 package mx.com.ghg.movies.ui.moviedetail;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import com.bumptech.glide.Glide;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ public class MovieDetailActivity
     private RecyclerView _videosRecycler;
     private ProgressBar _loader;
     private TextView _error_message;
+    private Button _mark_as_favorite_btn;
 
     private MovieUi movieUi;
     private MovieDetailAdapter _videoAdapter;
@@ -70,6 +73,7 @@ public class MovieDetailActivity
         _videosRecycler = (RecyclerView) findViewById(R.id.movie_detail_videos_recycler);
         _loader = (ProgressBar) findViewById(R.id.movie_detail_loader_pb);
         _error_message = (TextView) findViewById(R.id.movie_detail_error_message_text);
+        _mark_as_favorite_btn = (Button) findViewById(R.id.movie_detail_mark_favorite_action);
 
         // Set up recycler
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(
@@ -89,7 +93,11 @@ public class MovieDetailActivity
 
     @Override
     public void onVideoItemClick(MovieDetailUi movieUI) {
-
+        if (movieUI instanceof VideoUi) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(((VideoUi) movieUI).getYoutubeUrl()));
+            startActivity(intent);
+        }
     }
 
     private void updateUiState() {
