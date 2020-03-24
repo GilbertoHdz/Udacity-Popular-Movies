@@ -29,6 +29,14 @@ public class VideoUi extends MovieDetailUi implements Serializable {
         this.name = name;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getYoutubeUrl() {
         return "https://www.youtube.com/watch?v=" + this.key;
     }

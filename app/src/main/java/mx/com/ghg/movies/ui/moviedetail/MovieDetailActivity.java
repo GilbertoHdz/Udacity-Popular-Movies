@@ -22,10 +22,14 @@ import java.util.ArrayList;
 import mx.com.ghg.movies.R;
 import mx.com.ghg.movies.api.models.Review;
 import mx.com.ghg.movies.api.models.Video;
+import mx.com.ghg.movies.api.network.AppExecutors;
 import mx.com.ghg.movies.api.network.InternetCheck;
 import mx.com.ghg.movies.api.utilities.NetworkUtils;
 import mx.com.ghg.movies.api.utilities.ReviewJsonUtils;
 import mx.com.ghg.movies.api.utilities.VideoJsonUtils;
+import mx.com.ghg.movies.db.AppDatabase;
+import mx.com.ghg.movies.db.entities.ReviewEntity;
+import mx.com.ghg.movies.db.entities.VideoEntity;
 import mx.com.ghg.movies.ui.movies.MainActivity;
 import mx.com.ghg.movies.ui.movies.MovieUi;
 
@@ -48,6 +52,8 @@ public class MovieDetailActivity
     private MovieUi movieUi;
     private MovieDetailAdapter _videoAdapter;
 
+    private AppDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,7 @@ public class MovieDetailActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Intent intentDetail = getIntent();
         if (intentDetail != null) {
@@ -88,6 +95,8 @@ public class MovieDetailActivity
         _videosRecycler.setAdapter(_videoAdapter);
 
         updateUiState();
+
+        mDb = AppDatabase.getInstance(getApplicationContext());
         checkNetworkConnection();
     }
 
@@ -98,6 +107,12 @@ public class MovieDetailActivity
             intent.setData(Uri.parse(((VideoUi) movieUI).getYoutubeUrl()));
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void updateUiState() {
@@ -173,7 +188,10 @@ public class MovieDetailActivity
             if (null == videos || videos.size() == 0) {
                 showErrorMessage(R.string.videos_error_empty_message);
             } else {
+
                 ArrayList videosUi = new ArrayList(videos.size());
+                final ArrayList localEntity = new ArrayList(videos.size());
+
                 for (int i = 0; i < videos.size(); i++) {
                     Video video = videos.get(i);
 
@@ -184,7 +202,22 @@ public class MovieDetailActivity
                     );
 
                     videosUi.add(videoUi);
+
+                    VideoEntity entity = new VideoEntity(
+                            videoUi.getId(),
+                            videoUi.getName(),
+                            videoUi.getKey()
+                    );
+
+                    localEntity.add(entity);
                 }
+
+                AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.movieDao().insertVideos(localEntity);
+                    }
+                });
 
                 _videoAdapter.setVideoItems(videosUi);
                 showVideos();
@@ -216,6 +249,8 @@ public class MovieDetailActivity
                 showReviewErrorMessage(R.string.review_error_empty_message);
             } else {
                 ArrayList reviewsUi = new ArrayList(reviews.size());
+                final ArrayList localEntity = new ArrayList(reviews.size());
+
                 for (int i = 0; i < reviews.size(); i++) {
                     Review review = reviews.get(i);
 
@@ -227,7 +262,22 @@ public class MovieDetailActivity
                     );
 
                     reviewsUi.add(videoUi);
+
+                    ReviewEntity entity = new ReviewEntity(
+                            videoUi.getId(),
+                            movieUi.getId(),
+                            videoUi.getAuthor(),
+                            videoUi.getContent(),
+                            videoUi.getUrl()
+                    );
                 }
+
+                AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.movieDao().insertVideos(localEntity);
+                    }
+                });
 
                 _videoAdapter.addReviewItems(reviewsUi);
             }

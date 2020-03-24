@@ -71,6 +71,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mDb = AppDatabase.getInstance(getApplicationContext());
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+
+        if (null != savedInstanceState
+                && savedInstanceState.containsKey(KEY_QUERY_MOVIE)
+                && savedInstanceState.getInt(KEY_QUERY_MOVIE) != -1
+        ) {
+            if (savedInstanceState.getInt(KEY_QUERY_MOVIE) == R.id.menu_most_popular) {
+                getPopularityMovies();
+            } else {
+                getTopRatedMovies();
+            }
+        }
     }
 
     @Override
