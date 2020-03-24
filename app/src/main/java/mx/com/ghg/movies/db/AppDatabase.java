@@ -8,12 +8,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import mx.com.ghg.movies.db.dao.MovieDao;
-import mx.com.ghg.movies.db.entities.MovieEntity;
+import mx.com.ghg.movies.db.entities.PopularEntity;
 import mx.com.ghg.movies.db.entities.ReviewEntity;
+import mx.com.ghg.movies.db.entities.TopRatedEntity;
 import mx.com.ghg.movies.db.entities.VideoEntity;
 
 @Database(entities = {
-        MovieEntity.class,
+        TopRatedEntity.class,
+        PopularEntity.class,
         VideoEntity.class,
         ReviewEntity.class
     }, version = 1, exportSchema = true)

@@ -2,6 +2,10 @@ package mx.com.ghg.movies.ui.movies;
 
 import java.io.Serializable;
 
+import mx.com.ghg.movies.api.models.Movie;
+import mx.com.ghg.movies.db.entities.PopularEntity;
+import mx.com.ghg.movies.db.entities.TopRatedEntity;
+
 public class MovieUi implements Serializable {
 
     Integer id;
@@ -11,20 +15,31 @@ public class MovieUi implements Serializable {
     Double rating; // vote_average
     String releaseDate;
 
-    public MovieUi(
-            Integer id,
-            String title,
-            String image,
-            String synopsis,
-            Double rating,
-            String releaseDate
-    ) {
-        this.id = id;
-        this.title = title;
-        this.image = image;
-        this.synopsis = synopsis;
-        this.rating = rating;
-        this.releaseDate = releaseDate;
+    public MovieUi(Movie movie) {
+        this.id = movie.getId();
+        this.title = movie.getTitle();
+        this.image = movie.getPosterPath();
+        this.synopsis = movie.getOverview();
+        this.rating = movie.getVoteAverage();
+        this.releaseDate = movie.getReleaseDate();
+    }
+
+    public MovieUi(TopRatedEntity entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.image = entity.getImage();
+        this.synopsis = entity.getSynopsis();
+        this.rating = entity.getRating();
+        this.releaseDate = entity.getReleaseDate();
+    }
+
+    public MovieUi(PopularEntity entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.image = entity.getImage();
+        this.synopsis = entity.getSynopsis();
+        this.rating = entity.getRating();
+        this.releaseDate = entity.getReleaseDate();
     }
 
     public Integer getId() {

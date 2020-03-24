@@ -3,8 +3,8 @@ package mx.com.ghg.movies.db.entities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "movie")
-public class MovieEntity {
+@Entity(tableName = "top_rated_movie")
+public class TopRatedEntity {
 
     @PrimaryKey private int id;
     private String title;
@@ -13,7 +13,7 @@ public class MovieEntity {
     private Double rating; // vote_average
     private String releaseDate;
 
-    public MovieEntity(
+    public TopRatedEntity(
             int id,
             String title,
             String image,
